@@ -1,0 +1,549 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>How to add data to databases (phpMyAdmin) — Tutorial + Example</title>
+  <style>
+    :root{
+      --accent:#2563eb;
+      --muted:#6b7280;
+      --card-bg:#e0f2fe;   /* light blue background for cards */
+    }
+    body{
+      font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      line-height:1.7;color:#111827;padding:40px;background:white;font-size: 1.1rem;
+    }
+    .container{max-width:1100px;margin:0 auto}
+    h1{font-size:1.8rem;margin:0 0 8px}
+    p.lead{color:var(--muted);margin:0 0 20px}
+
+    /* Grid for steps */
+    .steps-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* exactly 2 columns */
+  max-width: 100%;
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+/* Special grid for code examples - HTML gets more space */
+.steps-grid.code-examples {
+  grid-template-columns: 2fr 1fr; /* HTML card gets 2/3, PHP gets 1/3 */
+}
+
+@media (max-width: 768px) {
+  .steps-grid {
+    grid-template-columns: 1fr; /* single column on mobile */
+    gap: 20px;
+  }
+}
+
+
+    .step{
+      background:white;
+      border-radius:8px;
+      padding:24px;
+      box-shadow:0 2px 8px rgba(0,0,0,0.08);
+      display:flex;
+      flex-direction:column;
+      border:1px solid #e5e7eb;
+      margin-bottom: 20px;
+    }
+    .step h2{font-size:1.3rem;margin-top:0;margin-bottom:12px;color:#1e293b;font-weight:600}
+    .step p{margin:0 0 16px;line-height:1.6}
+    .step ol, .step ul{margin:8px 0 16px 20px;line-height:1.6}
+    .step li{margin-bottom:4px}
+
+    /* Centered + bigger images */
+.thumb {
+  display: block;
+  margin: 14px auto 0;
+  max-width: 98%;      /* use almost full width of card */
+  height: auto;        /* keep natural aspect ratio */
+  object-fit: contain;
+  border: 2px solid #cbd5e1;
+  border-radius: 10px;
+  background: white;
+  padding: 8px;
+}
+
+.steps-grid .step:nth-of-type(2) .thumb,
+.steps-grid .step:nth-of-type(3) .thumb {
+  max-width: 90%;     /* allow full card width */
+  padding: 10px;
+  border: 3px solid #94a3b8; /* darker border for visibility */
+}
+
+    .code{
+      background:#0f1724;color:#fff;padding:12px;border-radius:8px;
+      font-family:monospace;overflow:auto;font-size:.9rem
+    }
+    
+    /* Red text for important comments */
+    .code .red-comment {
+      color: #ff6b6b !important;
+      font-weight: bold;
+    }
+    
+    .code .red-text {
+      color: #ff6b6b !important;
+    }
+    form{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+    label{font-size:0.85rem;color:var(--muted)}
+    input[type=text], input[type=password], textarea{
+      padding:8px;border:1px solid #e6e9ef;border-radius:6px;width:100%;box-sizing:border-box
+    }
+    .full{grid-column:1/-1}
+    .btn{background:var(--accent);color:white;padding:10px 14px;border-radius:8px;border:0;cursor:pointer}
+    footer{font-size:0.85rem;color:var(--muted);margin-top:24px}
+    .note{
+      background:#fff7ed;border-left:4px solid #f59e0b;
+      padding:10px;border-radius:6px;margin-top:12px;font-size:0.9rem
+    }
+    .container-fluid {
+  max-width: 1900px;
+  padding: 0 24px;
+  margin: 0 auto;
+}
+
+    /* Section styling */
+    h2 {
+      margin-top: 50px !important;
+      margin-bottom: 24px !important;
+      color: #1e293b;
+      border-bottom: 3px solid var(--accent);
+      padding-bottom: 12px;
+      font-size: 1.6rem;
+      font-weight: 700;
+    }
+
+    .section-intro {
+      margin-bottom: 40px;
+      color: var(--muted);
+      font-size: 1.1rem;
+      line-height: 1.7;
+}
+
+  </style>
+</head>
+<body>
+  <div class="container-fluid">
+    <h1>Complete Database Tutorial: Setup, Development, and Data Management</h1>
+    <p class="lead">A comprehensive guide covering server-side database creation, client-side implementation, and data management through phpMyAdmin.</p>
+
+    <!-- Section 1: Server-side Database Setup -->
+    <h2>Section 1: Server-side Database Setup</h2>
+    <p class="section-intro">Learn how to create database tables and understand different data types for proper database structure.</p>
+    
+    <div class="steps-grid">
+      <section class="step">
+        <h2>1) Access phpMyAdmin</h2>
+        <p>Log into your hosting control panel (HostArmada, cPanel, etc.) and open phpMyAdmin to manage your databases.</p>
+        <ol>
+          <li>Sign into your hosting account</li>
+          <li>Click the cPanel/Control Panel icon</li>
+          <li>Find and click "phpMyAdmin"</li>
+        </ol>
+        <img class="thumb" src="images/hostarmada-login.png" alt="HostArmada login page">
+      </section>
+
+      <section class="step">
+        <h2>2) Click Control Panel</h2>
+        <p>Once logged into your hosting account, locate and click the cPanel/Control Panel icon to access your hosting management tools.</p>
+        <img class="thumb" src="images/cpanel-icon.png" alt="cPanel icon in hosting dashboard">
+      </section>
+
+      <section class="step">
+        <h2>3) Access phpMyAdmin</h2>
+        <p>In the cPanel dashboard, find the phpMyAdmin option under the database section and click it to open the database management interface.</p>
+        <img class="thumb" src="images/phpmyadmin-link.png" alt="phpMyAdmin link in cPanel">
+      </section>
+
+      <section class="step">
+        <h2>4) Table Structure Best Practices</h2>
+        <p>Follow these guidelines when creating tables:</p>
+        <ul>
+          <li><strong>Primary Key:</strong> Always include an AUTO_INCREMENT INT primary key (like 'id')</li>
+          <li><strong>Timestamps:</strong> Add creation/update timestamps for tracking</li>
+          <li><strong>Null Values:</strong> Decide which fields can be empty (NULL) vs required (NOT NULL)</li>
+          <li><strong>Constraints:</strong> Use appropriate constraints for data integrity</li>
+        </ul>
+        <img class="thumb" src="images/phpmyadmin-left-dbs.png" alt="phpMyAdmin database structure">
+      </section>
+
+    </div>
+
+    <!-- Section 1: Additional Cards -->
+    <div class="steps-grid">
+      <section class="step">
+        <h2>5) Create a New Table</h2>
+        <p>In phpMyAdmin, select your database and create a new table with appropriate columns and data types.</p>
+        <img class="thumb" src="images/tablecreation.png" alt="Creating a new table in phpMyAdmin">
+      </section>
+
+      <section class="step">
+        <h2>6) Understanding Data Types</h2>
+        <p>Different data types serve different purposes in your database:</p>
+        <ul>
+          <li><strong>INT:</strong> Whole numbers (1, 2, 100, -50)</li>
+          <li><strong>CHAR(n):</strong> Fixed-length text (exactly n characters)</li>
+          <li><strong>VARCHAR(n):</strong> Variable-length text (up to n characters)</li>
+          <li><strong>DECIMAL(m,d):</strong> Precise decimal numbers (m digits total, d after decimal)</li>
+          <li><strong>TIMESTAMP:</strong> Date and time stamps</li>
+          <li><strong>TEXT:</strong> Large amounts of text</li>
+        </ul>
+        <div class="note"><strong>Tip:</strong> Choose data types based on your data - use INT for IDs, CHAR for fixed codes, DECIMAL for money/precise numbers.</div>
+      </section>
+    </div>
+
+    <!-- Section 1: Video (below the first 6 cards) -->
+    <div class="steps-grid">
+      <section class="step full">
+        <h2>Video: Create a Table and Insert Data in phpMyAdmin</h2>
+        <div class="video-wrapper" style="position:relative;padding-top:56.25%;width:100%;height:0;overflow:hidden;border-radius:10px;border:2px solid #cbd5e1;background:#000">
+          <iframe src="https://www.youtube-nocookie.com/embed/NrgIskkXNRE" title="phpMyAdmin tutorial" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+        </div>
+      </section>
+    </div>
+
+    <!-- Section 2: Creating Your Own Experiment -->
+    <h2>Section 2: Creating Your Own Experiment</h2>
+    <p class="section-intro">Learn how to build a complete survey experiment that collects data from participants and stores it in your database using HTML, JavaScript, and PHP.</p>
+    
+    <!-- Code Examples Side by Side -->
+    <div class="steps-grid code-examples">
+      <section class="step">
+        <h2>HTML Survey Form</h2>
+        <p>This is the complete HTML file for a demographic survey that collects participant data. The form uses JavaScript to create a multi-step survey experience.</p>
+        <pre>
+        <div class="code">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Demographic Survey&lt;/title&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;style&gt;
+        body {
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .survey-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .question {
+            margin-bottom: 30px;
+            display: none;
+        }
+        .question.active { display: block; }
+        .question h3 { color: #333; margin-bottom: 15px; }
+        .options { margin: 15px 0; }
+        .option {
+            margin: 8px 0;
+            display: flex;
+            align-items: center;
+        }
+        .option input { margin-right: 10px; }
+        .option label { cursor: pointer; flex: 1; }
+        select, input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        .buttons {
+            margin-top: 30px;
+            display: flex;
+            justify-content: space-between;
+        }
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background-color: #e9ecef;
+            border-radius: 3px;
+            margin-bottom: 20px;
+        }
+        .progress-fill {
+            height: 100%;
+            background-color: #007bff;
+            border-radius: 3px;
+            transition: width 0.3s;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="survey-container"&gt;
+        &lt;div class="progress-bar"&gt;
+            &lt;div class="progress-fill" id="progressFill"&gt;&lt;/div&gt;
+        &lt;/div&gt;
+        
+        &lt;div id="survey-form"&gt;
+            &lt;!-- &lt;span class="red-comment"&gt;QUESTION 1: ADD YOUR QUESTIONS HERE&lt;/span&gt; --&gt;
+            &lt;div class="question active" id="q1"&gt;
+                &lt;h3&gt;What is your sex?&lt;/h3&gt;
+                &lt;div class="options"&gt;
+                    &lt;div class="option"&gt;
+                        &lt;input type="radio" name="sex" value="Male" id="sex_male"&gt;
+                        &lt;label for="sex_male"&gt;Male&lt;/label&gt;
+                    &lt;/div&gt;
+                    &lt;div class="option"&gt;
+                        &lt;input type="radio" name="sex" value="Female" id="sex_female"&gt;
+                        &lt;label for="sex_female"&gt;Female&lt;/label&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+            
+            &lt;!-- &lt;span class="red-comment"&gt;QUESTION 2: ADD MORE QUESTIONS BY COPYING THIS STRUCTURE&lt;/span&gt; --&gt;
+            &lt;div class="question" id="q2"&gt;
+                &lt;h3&gt;How old are you?&lt;/h3&gt;
+                &lt;input type="number" id="age" name="age" min="18" max="100" placeholder="Enter your age" /&gt;
+            &lt;/div&gt;
+            
+            &lt;!-- &lt;span class="red-comment"&gt;NAVIGATION BUTTONS&lt;/span&gt; --&gt;
+            &lt;div class="buttons"&gt;
+                &lt;button type="button" class="btn-secondary" id="prevBtn" onclick="previousQuestion()" disabled&gt;Previous&lt;/button&gt;
+                &lt;button type="button" class="btn-primary" id="nextBtn" onclick="nextQuestion()"&gt;Next&lt;/button&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+        
+        &lt;div id="completion" style="display: none; text-align: center;"&gt;
+            &lt;h2&gt;Survey Complete!&lt;/h2&gt;
+            &lt;p&gt;Thank you for completing the survey. Your responses have been recorded.&lt;/p&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;script&gt;
+        &lt;span class="red-comment"&gt;// STEP 1: GET PARTICIPANT IDS FROM URL (IMPORTANT FOR DATA TRACKING)&lt;/span&gt;
+        const urlstring = window.location.search;
+        const urlparams = new URLSearchParams(urlstring);
+        let userid = urlparams.get('userid');
+        let PROLIFICPID = urlparams.get('PROLIFIC_PID');
+        let STUDYID = urlparams.get('STUDY_ID');
+        let SESSIONID = urlparams.get('SESSION_ID');
+        
+        &lt;span class="red-comment"&gt;// STEP 2: CONFIGURE YOUR SURVEY (CHANGE THESE NUMBERS)&lt;/span&gt;
+        let currentQuestion = 1;
+        const totalQuestions = 2; &lt;span class="red-comment"&gt;// CHANGE THIS: How many questions do you have?&lt;/span&gt;
+        let surveyData = {};
+        
+        // STEP 3: QUESTION NAVIGATION FUNCTIONS
+        function showQuestion(num) {
+            // Hide all questions
+            document.querySelectorAll('.question').forEach(q =&gt; q.classList.remove('active'));
+            // Show current question
+            document.getElementById('q' + num).classList.add('active');
+            // Update navigation buttons
+            document.getElementById('prevBtn').disabled = (num === 1);
+            document.getElementById('nextBtn').textContent = (num === totalQuestions) ? 'Complete Survey' : 'Next';
+        }
+        
+        function nextQuestion() {
+            if (currentQuestion === totalQuestions) {
+                completeSurvey();
+                return;
+            }
+            currentQuestion++;
+            showQuestion(currentQuestion);
+        }
+        
+        function previousQuestion() {
+            if (currentQuestion &gt; 1) {
+                currentQuestion--;
+                showQuestion(currentQuestion);
+            }
+        }
+        
+        // STEP 4: DATA COLLECTION AND SUBMISSION (MODIFY THIS SECTION)
+        function completeSurvey() {
+            // COLLECT YOUR DATA: Add each question's data here
+            surveyData.sex = document.querySelector('input[name="sex"]:checked').value;
+            surveyData.age = document.getElementById('age').value;
+            surveyData.timestamp = new Date().toISOString();
+            
+            // Hide survey form and show completion message
+            document.getElementById('survey-form').style.display = 'none';
+            document.getElementById('completion').style.display = 'block';
+            
+            // SEND DATA TO PHP: This sends all data to your survey.php file
+            const params = new URLSearchParams({
+                PROLIFICPID: PROLIFICPID,
+                STUDYID: STUDYID,
+                SESSIONID: SESSIONID,
+                userid: userid,
+                sex: surveyData.sex,
+                age: surveyData.age
+                // ADD MORE FIELDS HERE: Add your custom questions
+            });
+            
+            fetch('survey.php?' + params.toString(), { method: 'GET' });
+            
+            // REDIRECT AFTER COMPLETION: Change this URL to your completion page
+            setTimeout(() =&gt; {
+                window.location.href = "https://app.prolific.com/submissions/complete?cc=CFEM8M48";
+            }, 500);
+        }
+        
+        // Initialize the survey
+        document.addEventListener('DOMContentLoaded', function() {
+            showQuestion(1);
+        });
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</div>
+</pre>
+      </section>
+
+      <section class="step">
+        <h2>PHP Data Processing Script</h2>
+        <pre>
+        <div class="code">&lt;?php
+// STEP 1: DATABASE CONNECTION SETTINGS (CHANGE THESE TO YOUR DATABASE)
+$servername = "localhost";        // Your database server
+$username = "your_db_username";   // Your database username
+$password = "your_db_password";   // Your database password
+$dbname = "your_database_name";   // Your database name
+
+// STEP 2: CONNECT TO DATABASE
+$conn = mysqli_connect($servername, $username, $password, $dbname);
+
+// Check if connection worked
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+
+// STEP 3: GET DATA FROM HTML FORM (AUTOMATICALLY RECEIVED FROM JAVASCRIPT)
+$PROLIFICPID = $_GET['PROLIFICPID'];  // Participant ID from Prolific
+$STUDYID = $_GET['STUDYID'];          // Study identifier
+$SESSIONID = $_GET['SESSIONID'];      // Session identifier
+$userid = $_GET['userid'];            // Your custom user ID
+$sex = $_GET['sex'];                  // Survey response: sex
+$age = $_GET['age'];                  // Survey response: age
+// ADD MORE VARIABLES HERE: Add variables for your custom questions
+
+// STEP 4: INSERT DATA INTO YOUR DATABASE TABLE
+$sql = "INSERT INTO demographics 
+        (PROLIFICPID, STUDYID, SESSIONID, userid, sex, age)
+        VALUES ('$PROLIFICPID', '$STUDYID', '$SESSIONID', '$userid', '$sex', $age)";
+        // CHANGE TABLE NAME: Replace 'demographics' with your table name
+        // ADD MORE COLUMNS: Add columns for your custom questions
+
+// STEP 5: EXECUTE THE DATABASE INSERTION
+if (mysqli_query($conn, $sql)) {
+    echo "New record created successfully";
+} else {
+    echo "Error: " . $sql . "&lt;br&gt;" . mysqli_error($conn);
+}
+
+// STEP 6: CLOSE DATABASE CONNECTION
+mysqli_close($conn);
+?&gt;</pre>
+</div>
+      </section>
+    </div>
+
+
+    <!-- How It All Works Together -->
+    <div class="steps-grid">
+      <section class="step full">
+        <h2>How It All Works Together</h2>
+        <p>Here's the complete flow of how your experiment works:</p>
+        <ol>
+          <li><strong>Participant visits your HTML page</strong> - They see the survey form</li>
+          <li><strong>JavaScript collects responses</strong> - As they answer questions, data is stored in memory</li>
+          <li><strong>Form validation</strong> - JavaScript checks that required fields are filled</li>
+          <li><strong>Data submission</strong> - When complete, JavaScript sends data to your PHP script</li>
+          <li><strong>PHP receives data</strong> - The $_GET array captures all the survey responses</li>
+          <li><strong>Database insertion</strong> - PHP connects to your database and inserts the new record</li>
+          <li><strong>Confirmation</strong> - PHP confirms the data was saved successfully</li>
+          <li><strong>Redirect</strong> - JavaScript redirects participant to completion page</li>
+        </ol>
+        
+        <div class="note"><strong>To customize for your experiment:</strong> 
+        <ul>
+          <li>Change the questions in the HTML to match your research</li>
+          <li>Update the database table structure to match your data needs</li>
+          <li>Modify the PHP script to insert into your specific table</li>
+          <li>Adjust the redirect URL to your completion page</li>
+        </ul>
+        </div>
+      </section>
+    </div>
+
+    <!-- Section 3: Adding Data to Tables -->
+    <h2>Section 3: Adding Data to Tables</h2>
+    <p class="section-intro">Learn different methods to add data to your database tables manually and programmatically.</p>
+    
+    <div class="steps-grid">
+      <section class="step">
+        <h2>1) Navigate to Your Table</h2>
+        <p>In phpMyAdmin, click your database name in the left panel, then click the table you want to add data to.</p>
+        <img class="thumb" src="images/phpmyadmin-table-list.png" alt="phpMyAdmin showing tables inside database">
+      </section>
+
+      <section class="step">
+        <h2>2) Using phpMyAdmin Insert Tab</h2>
+        <p>The easiest way to manually add data is through phpMyAdmin's Insert interface.</p>
+        <ol>
+          <li>Select your table from the left panel</li>
+          <li>Click the <strong>Insert</strong> tab at the top</li>
+          <li>Fill in the form fields that correspond to your table columns</li>
+          <li>Click <strong>Go</strong> to insert the data</li>
+        </ol>
+        <img class="thumb" src="images/phpmyadmin-insert-tab.png" alt="phpMyAdmin insert tab">
+      </section>
+
+      <section class="step">
+        <h2>3) Bulk Data Import</h2>
+        <p>For larger datasets, use phpMyAdmin's Import feature to upload CSV or SQL files.</p>
+        <ol>
+          <li>Prepare your data in CSV format</li>
+          <li>Click the <strong>Import</strong> tab in phpMyAdmin</li>
+          <li>Choose your file and select the appropriate format</li>
+          <li>Map columns to your table structure</li>
+          <li>Execute the import</li>
+        </ol>
+        <div class="note"><strong>Tip:</strong> Always backup your database before importing large datasets.</div>
+      </section>
+
+      <section class="step full">
+        <h2>4) Troubleshooting Common Issues</h2>
+        <ul>
+          <li><strong>Access denied:</strong> Check username/password and database user privileges</li>
+          <li><strong>Column mismatch:</strong> Verify table structure in phpMyAdmin → Structure tab</li>
+          <li><strong>Data type errors:</strong> Ensure your data matches the column data types (INT, CHAR, DECIMAL, etc.)</li>
+          <li><strong>Connection issues:</strong> For localhost use <code>localhost</code> or <code>127.0.0.1</code>. For remote hosts, use the host provided by your hosting provider</li>
+          <li><strong>Form not submitting:</strong> Check form action URL and method (POST vs GET)</li>
+          <li><strong>PHP errors:</strong> Enable error reporting during development: <code>error_reporting(E_ALL); ini_set('display_errors', 1);</code></li>
+        </ul>
+      </section>
+    </div>
+
+    <footer>
+      <p>Replace the images in the <code>images/</code> directory with screenshots you want to display: <code>hostarmada-login.png</code>, <code>cpanel-icon.png</code>, <code>phpmyadmin-link.png</code>, <code>phpmyadmin-left-dbs.png</code>, <code>phpmyadmin-table-list.png</code>, <code>phpmyadmin-insert-tab.png</code>.</p>
+    </footer>
+  </div>
+</body>
+</html>
