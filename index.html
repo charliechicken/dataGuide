@@ -124,6 +124,9 @@
       font-size: 1.1rem;
       line-height: 1.7;
 }
+h1 {
+  font-size: 2.5rem;
+}
 
   </style>
 </head>
@@ -138,25 +141,41 @@
     
     <div class="steps-grid">
       <section class="step">
-        <h2>1) Access phpMyAdmin</h2>
-        <p>Log into your hosting control panel (HostArmada, cPanel, etc.) and open phpMyAdmin to manage your databases.</p>
+        <h2>1) Log into Your Hosting Control Panel (HostArmada / Lab Server)</h2>
+        <p>This step ensures you can access the server where your database and website files are hosted. Follow each sub-step carefully — many users get stuck here due to login or navigation confusion.</p>
         <ol>
-          <li>Sign into your hosting account</li>
-          <li>Click the cPanel/Control Panel icon</li>
-          <li>Find and click "phpMyAdmin"</li>
+          <li><strong>Open the HostArmada Website:</strong>  
+            Go to <a href="https://hostarmada.net" target="_blank">https://hostarmada.net</a> in your web browser.</li>
+          <li><strong>Click “Sign In” at the top right corner</strong> of the page. This will open the login screen for your hosting account.</li>
+          <li><strong>Enter your account credentials:</strong>  
+            Use your specific <em>username</em> and <em>password</em> provided in the lab’s internal documentation or wiki, or sent to you. If you don't have a username and password, send me a message on Slack (Charlie O), and I will help create an account.</li>
+          <li><strong>Click “Log In.”</strong> You’ll now be redirected to your HostArmada Dashboard.</li>
+          <li><strong>Locate the Hosting Service for Your Lab Project:</strong>  
+            On the dashboard, look for the card labeled <code>Active Services</code> or <code>My Hosting Plans</code>.  
+            Click on the hosting plan name (for example, <em>labwebsite.hostarmadatemp.com</em>).</li>
+          
         </ol>
         <img class="thumb" src="images/hostarmada-login.png" alt="HostArmada login page">
       </section>
 
       <section class="step">
         <h2>2) Click Control Panel</h2>
-        <p>Once logged into your hosting account, locate and click the cPanel/Control Panel icon to access your hosting management tools.</p>
+        <ol>
+        <li><strong>Access the Control Panel:</strong>  
+          Inside the service details page, find the <strong>Control Panel</strong> or <strong>cPanel</strong> button (it usually has a grey or orange icon).  
+          Click it — this opens the full hosting management area where you can manage files, databases, and server configurations.</li>
+        
+        </ol>
         <img class="thumb" src="images/cpanel-icon.png" alt="cPanel icon in hosting dashboard">
       </section>
 
       <section class="step">
         <h2>3) Access phpMyAdmin</h2>
-        <p>In the cPanel dashboard, find the phpMyAdmin option under the database section and click it to open the database management interface.</p>
+        <ol>
+        <li><strong>Open phpMyAdmin:</strong>  
+          In cPanel, scroll down until you see the section labeled <strong>Databases</strong>.  
+          Click on <strong>phpMyAdmin</strong> — this tool lets you view and manage your MySQL databases directly.</li>
+        </ol>
         <img class="thumb" src="images/phpmyadmin-link.png" alt="phpMyAdmin link in cPanel">
       </section>
 
@@ -169,6 +188,7 @@
           <li><strong>Null Values:</strong> Decide which fields can be empty (NULL) vs required (NOT NULL)</li>
           <li><strong>Constraints:</strong> Use appropriate constraints for data integrity</li>
         </ul>
+        <p>You should now see the following table, which may include information_schema and performance_schema tables. You can ignore these. As you can see, levydeci_online is the database we have previously created, which we can access and modify using php and manual operations (which will be discussed below).</p>
         <img class="thumb" src="images/phpmyadmin-left-dbs.png" alt="phpMyAdmin database structure">
       </section>
 
@@ -178,7 +198,7 @@
     <div class="steps-grid">
       <section class="step">
         <h2>5) Create a New Table</h2>
-        <p>In phpMyAdmin, select your database and create a new table with appropriate columns and data types.</p>
+        <p>In phpMyAdmin, in order to create a new table, you need to select your database and click on the "New" button. This will open a new window where you can create a new table with appropriate columns and data types. You should specify the number of columns you're going to add (for example, id, prolificid, any demographic info such as age/sex/race/etc., and any other information you want to collect from the participants).</p>
         <img class="thumb" src="images/tablecreation.png" alt="Creating a new table in phpMyAdmin">
       </section>
 
@@ -194,6 +214,7 @@
           <li><strong>TEXT:</strong> Large amounts of text</li>
         </ul>
         <div class="note"><strong>Tip:</strong> Choose data types based on your data - use INT for IDs, CHAR for fixed codes, DECIMAL for money/precise numbers.</div>
+        <div class="note"><strong>The video below shows you how to create a table and insert data in phpMyAdmin (0:00 - 2:05), step by step, and also describes with more depth the various data types to choose from (2:05 - 9:10).</strong></div>
       </section>
     </div>
 
@@ -210,7 +231,31 @@
     <!-- Section 2: Creating Your Own Experiment -->
     <h2>Section 2: Creating Your Own Experiment</h2>
     <p class="section-intro">Learn how to build a complete survey experiment that collects data from participants and stores it in your database using HTML, JavaScript, and PHP.</p>
-    
+    <div class="steps-grid">
+    <section class="step">
+      <h2>Navigating to the lab website's file manager</h2>
+      <p>In order to edit and add files to the lab website, you need to navigate to the lab website's file manager (View Step 2 of Section 1 to navigateto the hosting management area, where file manager is located). You can do this by clicking on the "File Manager" button in the left sidebar of the lab website's control panel.</p>
+      <img class="thumb" src="images/file-manager.png" alt="File manager in the lab website's control panel">
+    </section>
+    <section class="step">
+      <h2>Accessing the Lab Website's Files</h2>
+      <p>In order to access the lab website's files, you must clik on public_html in the left sidebar of the file manager. This is where the lab website's files are, and the files which get displayed on the web (html files, php connects).</p>
+      <img class="thumb" src="images/public_html.png" alt="Public_html in the file manager">
+    </section>
+    <section class="step">
+      <h2>Creating a New Folder</h2>
+      <p>In order to create new folders and files, you need to click on the "New" button in the top right corner of the file manager. This will open a new window where you can create a new folder or filewith a name of your choice. Creating an "index.html" file is the default file that gets displayed on the web (the landing page of the lab website).</p>
+      <img class="thumb" src="images/new-folder.png" alt="New folder in the file manager">
+      <div class="note"><strong>Note:</strong> Here, an nexp folder is shown. An index.html or other .html files should be created in this folder, where users can navigate to at websitedomain.com/nexp/index.html or websitedomain.com/nexp/experiment.html, for instance. For the purpose of this tutorial, we are using nexp as the main folder where the experiment will be located.</div>
+
+    </section>
+    <section class="step">
+      <h2>Using HTML and php to collect data and send it to the database</h2>
+      <p>In order to use HTML and php to collect data and send it to the database, you need to create a new file in the nexp folder. You can do this by clicking on the "New" button in the top right corner of the file manager. This will open a new window where you can create a new file with a name of your choice. Creating an "index.html" file is the default file that gets displayed on the web (the landing page of the lab website).</p>
+      <img class="thumb" src="images/new-file.png" alt="New file in the file manager">
+      <div class="note"><strong>Note:</strong> Here, an experiment.html file is shown. This is the file should be sent to the user to record their responses. We will be using this file to collect data and send it to the database.</div>
+    </section>
+    </div>
     <!-- Code Examples Side by Side -->
     <div class="steps-grid code-examples">
       <section class="step">
@@ -418,6 +463,7 @@
 
       <section class="step">
         <h2>PHP Data Processing Script</h2>
+        <p class="section-intro">This is a complete example PHP script for processing  survey data and inserting it into databases. It connects to your database and inserts the participant responses.</p>
         <pre>
         <div class="code">&lt;?php
 // STEP 1: DATABASE CONNECTION SETTINGS (CHANGE THESE TO YOUR DATABASE)
@@ -462,7 +508,6 @@ mysqli_close($conn);
 ?&gt;</pre>
 </div>
       </section>
-    </div>
 
 
     <!-- How It All Works Together -->
@@ -540,6 +585,7 @@ mysqli_close($conn);
         </ul>
       </section>
     </div>
+  </div>
 
     <footer>
       <p>Written by Charlie O.</p>
